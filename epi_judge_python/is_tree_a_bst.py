@@ -3,8 +3,16 @@ from test_framework import generic_test
 
 
 def is_binary_tree_bst(tree: BinaryTreeNode) -> bool:
-    # TODO - you fill in here.
-    return True
+    return is_binary_tree_bst_helper(tree, float("-inf"), float("inf"))
+
+def is_binary_tree_bst_helper(tree, minBoundary, maxBoundary):
+    if not tree:
+        return True
+    
+    if minBoundary <= tree.data <= maxBoundary:
+        return is_binary_tree_bst_helper(tree.left, minBoundary, tree.data) and is_binary_tree_bst_helper(tree.right, tree.data, maxBoundary)
+    
+    return False
 
 
 if __name__ == '__main__':

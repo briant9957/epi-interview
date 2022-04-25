@@ -10,9 +10,38 @@ from test_framework.test_utils import enable_executor_hook
 
 def lca(node0: BinaryTreeNode,
         node1: BinaryTreeNode) -> Optional[BinaryTreeNode]:
-    # TODO - you fill in here.
-    return None
+    if not node0 or not node1:
+        return None
+        
+    node0Distance = getDistanceFromRoot(node0)
+    node1Distance = getDistanceFromRoot(node1)
 
+    if node0Distance < node1Distance:
+        node1 = moveUpToRoot(node1, node1Distance - node0Distance)
+    else:
+        node0 = moveUpToRoot(node0, node0Distance - node1Distance)
+
+    parent = findSameParent(node0, node1)
+    return parent
+
+def getDistanceFromRoot(node):
+    if node.parent is None:
+        return 1
+    return 1 + getDistanceFromRoot(node.parent)
+
+def moveUpToRoot(node, distance):
+    if distance == 0:
+        return node
+    
+    return moveUpToRoot(node.parent, distance-1)
+
+def findSameParent(node0: BinaryTreeNode, node1: BinaryTreeNode):
+    if node0 is None or node1 is None:
+        return None
+    if node0 == node1:
+        return node0
+
+    return findSameParent(node0.parent, node1.parent)
 
 @enable_executor_hook
 def lca_wrapper(executor, tree, node0, node1):

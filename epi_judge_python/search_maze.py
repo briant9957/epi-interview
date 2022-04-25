@@ -10,12 +10,38 @@ from test_framework.test_utils import enable_executor_hook
 WHITE, BLACK = range(2)
 
 Coordinate = collections.namedtuple('Coordinate', ('x', 'y'))
-
+ExitedAndPath = collections.namedtuple("ExitedAndPath", ('exited', 'path'))
 
 def search_maze(maze: List[List[int]], s: Coordinate,
                 e: Coordinate) -> List[Coordinate]:
-    # TODO - you fill in here.
-    return []
+    visited = [[False for column in range(len(maze[0]))] for row in range(len(maze))]
+    
+    return search_maze_helper(maze, s, e, visited).path
+
+def search_maze_helper(maze: List[List[int]], s: Coordinate, e: Coordinate, visited):
+
+    if s.x < 0 or s.x >= len(maze) or s.y < 0 or s.y >= len(maze[0]) or maze[s.x][s.y] == 1 or visited[s.x][s.y]:
+        return ExitedAndPath(False, [])
+
+    if s.x == e.x and s.y == e.y:
+        return ExitedAndPath(True, [s])
+
+    visited[s.x][s.y] = True
+    up = search_maze_helper(maze, Coordinate(s.x + 1, s.y), e, visited)
+    if up.exited:
+        return ExitedAndPath(True, [s] + up.path)
+    down = search_maze_helper(maze, Coordinate(s.x - 1, s.y), e, visited)
+    if down.exited:
+        return ExitedAndPath(True, [s] + down.path)
+    left = search_maze_helper(maze, Coordinate(s.x, s.y - 1), e, visited)
+    if left.exited:
+        return ExitedAndPath(True, [s] + left.path)
+    right = search_maze_helper(maze, Coordinate(s.x, s.y + 1), e, visited)
+    if right.exited:
+        return ExitedAndPath(True, [s] + right.path)
+
+    return ExitedAndPath(False, [])
+    
 
 
 def path_element_is_feasible(maze, prev, cur):

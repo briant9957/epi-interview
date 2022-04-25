@@ -1,9 +1,19 @@
 from test_framework import generic_test
-
+import math
 
 def square_root(k: int) -> int:
-    # TODO - you fill in here.
-    return 0
+    start, end = 0, k
+    while start <= end:
+        middle = start + ((end-start) // 2)
+
+        if middle**2 <= k and (middle+1)**2 > k:
+            return middle
+        elif middle**2 > k:
+            end = middle-1
+        else:
+            start = middle+1
+
+    return k
 
 
 if __name__ == '__main__':

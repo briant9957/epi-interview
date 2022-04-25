@@ -2,10 +2,26 @@ from typing import Iterator, List
 
 from test_framework import generic_test
 
+import heapq
 
 def online_median(sequence: Iterator[int]) -> List[float]:
-    # TODO - you fill in here.
-    return []
+    minHeap = []
+    maxHeap = []
+
+    result = []
+
+    for i in sequence:
+        heapq.heappush(maxHeap, -heapq.heappushpop(minHeap, i))
+
+        if (len(minHeap) + len(maxHeap)) % 2 == 0:
+            result.append((minHeap[0] + (-1 * maxHeap[0])) / 2)
+        else:
+            result.append((-1* maxHeap[0]) / 1)
+
+        if len(maxHeap) > len(minHeap):
+            heapq.heappush(minHeap, -heapq.heappop(maxHeap))
+
+    return result
 
 
 def online_median_wrapper(sequence):

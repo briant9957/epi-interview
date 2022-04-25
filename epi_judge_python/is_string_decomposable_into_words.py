@@ -8,9 +8,26 @@ from test_framework.test_utils import enable_executor_hook
 
 def decompose_into_dictionary_words(domain: str,
                                     dictionary: Set[str]) -> List[str]:
-    # TODO - you fill in here.
-    return []
+    def decompose(start, result, memo):
+        if start == len(domain):
+            return True
+        if not memo[start]:
+            return False
 
+        for idx in range(start, len(domain)):
+            if domain[start:idx+1] in dictionary:
+                result.append(domain[start:idx+1])
+                if decompose(idx+1, result, memo):
+                    return True
+                result.pop()
+
+        memo[start] = False
+        return memo[start]
+    
+    memo = [True] * len(domain)
+    result = []
+    isDecomposable = decompose(0, result, memo)
+    return result if isDecomposable else []
 
 @enable_executor_hook
 def decompose_into_dictionary_words_wrapper(executor, domain, dictionary,

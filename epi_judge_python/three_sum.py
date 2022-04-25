@@ -4,8 +4,19 @@ from test_framework import generic_test
 
 
 def has_three_sum(A: List[int], t: int) -> bool:
-    # TODO - you fill in here.
-    return True
+    A.sort()
+    for x in range(len(A)):
+        low = x
+        high = len(A) - 1
+        while low <= high:
+            number = A[x] + A[low] + A[high]
+            if number == t:
+                return True
+            elif number < t:
+                low += 1
+            else:
+                high -= 1
+    return False
 
 
 if __name__ == '__main__':

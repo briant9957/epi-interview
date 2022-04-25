@@ -10,8 +10,18 @@ Event = collections.namedtuple('Event', ('start', 'finish'))
 
 
 def find_max_simultaneous_events(A: List[Event]) -> int:
-    # TODO - you fill in here.
-    return 0
+    endpoints = [ ep for event in A for ep in ((event.start, True), (event.finish, False)) ]
+    endpoints.sort(key=lambda e: (e[0], not e[1]))
+
+    max_concurrent, concurrent = 0, 0
+    for endpoint in endpoints:
+        if endpoint[1]:
+            concurrent += 1
+        else:
+            concurrent -= 1
+        max_concurrent = max(max_concurrent, concurrent)
+
+    return max_concurrent
 
 
 @enable_executor_hook

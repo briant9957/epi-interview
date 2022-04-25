@@ -5,7 +5,8 @@ from typing import Iterator, List
 from test_framework import generic_test
 from test_framework.test_utils import enable_executor_hook
 
-
+import heapq
+import math
 class Star:
     def __init__(self, x: float, y: float, z: float) -> None:
         self.x, self.y, self.z = x, y, z
@@ -28,8 +29,17 @@ class Star:
 
 
 def find_closest_k_stars(stars: Iterator[Star], k: int) -> List[Star]:
-    # TODO - you fill in here.
-    return []
+    if not stars:
+        return []
+
+    heap = []
+
+    for star in stars:
+        if len(heap) < k:
+            heapq.heappush(heap, (-1 * math.sqrt(star.x**2 + star.y**2 + star.z**2), star))
+        else:
+            heapq.heappushpop(heap, (-1 * math.sqrt(star.x**2 + star.y**2 + star.z**2), star))
+    return [x[1] for x in heapq.nsmallest(k, heap)]
 
 
 def comp(expected_output, output):

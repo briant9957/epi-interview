@@ -9,9 +9,17 @@ NUM_PEGS = 3
 
 
 def compute_tower_hanoi(num_rings: int) -> List[List[int]]:
-    # TODO - you fill in here.
-    return []
-
+    def compute_tower_hanoi_helper(num_rings, source, target, middleman):
+        if num_rings > 0:
+            compute_tower_hanoi_helper(num_rings-1, source, middleman, target)
+            pegs[target].append(pegs[source].pop())
+            result.append([source, target])
+            compute_tower_hanoi_helper(num_rings-1, middleman, target, source)
+    
+    result = []
+    pegs = [list(reversed(range(1, num_rings+1)))] + [[] for _ in range(1, NUM_PEGS)]
+    compute_tower_hanoi_helper(num_rings, 0, 2, 1)
+    return result
 
 @enable_executor_hook
 def compute_tower_hanoi_wrapper(executor, num_rings):

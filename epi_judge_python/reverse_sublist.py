@@ -6,8 +6,32 @@ from test_framework import generic_test
 
 def reverse_sublist(L: ListNode, start: int,
                     finish: int) -> Optional[ListNode]:
-    # TODO - you fill in here.
-    return None
+    
+    if not L or not L.next or start == finish:
+        return L
+
+    i = start-1
+    current = L
+    dummyHead = before = ListNode(0)
+    dummyHead.next = L
+    while i > 0:
+        before = current
+        current = current.next
+        i -= 1
+    
+    tail = current
+    head = current
+
+    for _ in range(start, finish+1):
+        nextNode = current.next
+        current.next = head
+        head = current
+        current = nextNode
+    
+    before.next = head
+    tail.next = current
+    
+    return dummyHead.next
 
 
 if __name__ == '__main__':
